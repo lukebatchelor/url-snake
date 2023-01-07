@@ -4,8 +4,12 @@ A little experiement with seeing how complex of an app I can store entirely with
 
 The basic idea revolves around the fact that a data urls can define their encoding as text/html. 
 
-i.e `data:text/html;charset=utf-8,hello%20world` is a valid url (try pasting it in your url bar). So is
-`data:text/html;charset=utf-8,%3Cstyle%3E%20*%20%7B%20color%3A%20red%3B%20%7D%3C%2Fstyle%3EHello%20world!`. Aditionally, so is `data:text/html;charset=utf-8,%3Cstyle%3E%20*%20%7B%20color%3A%20red%3B%20%7D%3C%2Fstyle%3EHello%20world!%3Cscript%3Ealert(%22hello%20again!%22)%3B%3C%2Fscript%3E`.
+i.e `data:text/html;charset=utf-8,hello%20world` is a valid url (try pasting it in your url bar). 
+
+So is
+`data:text/html;charset=utf-8,%3Cstyle%3E%20*%20%7B%20color%3A%20red%3B%20%7D%3C%2Fstyle%3EHello%20world!`. 
+
+Aditionally, so is `data:text/html;charset=utf-8,%3Cstyle%3E%20*%20%7B%20color%3A%20red%3B%20%7D%3C%2Fstyle%3EHello%20world!%3Cscript%3Ealert(%22hello%20again!%22)%3B%3C%2Fscript%3E`.
 
 So, if we can put html, css and js in a url and have that render a valid html page, how much of a page could we create?
 

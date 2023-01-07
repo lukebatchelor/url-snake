@@ -1,11 +1,91 @@
-<body><script>
-  const d=document,
-    b=d.body,
-    a=d.createElement('canvas'),
-    c = a.getContext("2d");
-  b.append(a)
-  c.height = 400;
-  c.width = 400;
-  c.rect(0,0,100,100);
-  c.stroke();
-</script>
+<body>
+  <script>
+    let d = document,
+      b = d.body,
+      M=Math,
+      body = `Press space to start/pause/reset, arrow keys to move<br><br><canvas id="a"><style>canvas{border: 1px solid black;}body{background:#ccc;}</style>`,
+      gridSize = 40,
+      height = 400,
+      width = height,
+      headingX = 0,
+      headingY = 1,
+      paused = 0,
+      dead = 1,
+      score=0,
+      snake = [
+        [3, 3],
+        [4, 3],
+        [5, 3],
+      ],
+      defaultSnake=snake,
+      fruit = [5, 5],
+      black = '#000',
+      rect = (x, y, col = black, w = gridSize, h = gridSize) => {
+        (ctx.fillStyle = col), ctx.fillRect(x, y, w, h);
+      },
+      text = (str, x, y, align='center') => {
+        ctx.fillStyle = black;
+        ctx.textAlign = align;
+        ctx.fillText(str, x, y);
+      },
+      rand=(max) => M.floor(M.random()*max),
+      update = () => {
+        if (paused || dead) return;
+        let [x, y] = snake.pop(),
+          nextX = snake[0][0] + headingX,
+          nextY = snake[0][1] + headingY;
+        // check death
+        if (
+          nextX < 0 ||
+          nextX > 9 ||
+          nextY < 0 ||
+          nextY > 9 ||
+          snake.some(([bX, bY]) => nextX == bX && nextY == bY)
+        )
+          return die();
+        // check fruit
+        if (nextX==fruit[0]&&nextY==fruit[1]) {
+          score++;
+          snake.push([...snake[snake.length-1]])
+          fruit = [rand(9), rand(9)]
+        }
+        snake.unshift([nextX, nextY]);
+        // clear screen
+        rect(0, 0, "#fff", width, height);
+        // draw snake
+        for ([x, y] of snake) {
+          rect(x * gridSize, y * gridSize);
+        }
+        // draw fruit
+        rect(fruit[0] * gridSize, fruit[1] * gridSize, "#0f0");
+        // draw score
+        text('Score: '+score, width-10, 30, 'right')
+      },
+      die = () => {
+        dead = 1;
+        rect(0, 0, "#f00", width, height);
+        text('You died :(', width/2, height/2)
+      },
+      reset = () => {
+        (dead = 0),
+          (snake = [...defaultSnake]),
+          (headingX = 0),
+          (score=0),
+          (headingY = 1);
+      };
+    b.innerHTML = body;
+    let ctx = a.getContext("2d");
+    a.height=height
+    a.width=width
+    ctx.font = "30px Arial";
+    d.addEventListener("keyup", (e) => {
+      var w = e.which;
+      w == 37 && ((headingX = -1), (headingY = 0));
+      w == 38 && ((headingX = 0), (headingY = -1));
+      w == 39 && ((headingX = 1), (headingY = 0));
+      w == 40 && ((headingX = 0), (headingY = 1));
+      w == 32 && (dead ? reset() : (paused = paused ? 0 : 1));
+    });
+    setInterval(update, 500);
+    update();
+  </script>

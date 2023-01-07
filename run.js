@@ -1,17 +1,17 @@
 const fs = require('fs')
 var UglifyJS = require("uglify-js");
 
-
+const DEBUG = !!process.env.DEBUG;
 const str = fs.readFileSync('./index.html', 'utf-8')
 const prefix = 'data:text/html;charset=utf-8,'
 const [html, js] = str.split('<script>')
   .map(part => part.replace('</script>', '').trim());
 
 /** @type {UglifyJS.MinifyOptions} */
-const minifyOpts  = {
+let minifyOpts  = {
   mangle: {
     eval: true,
-    toplevel: false
+    toplevel: false,
   },
   compress: {
 		sequences: true,
@@ -25,19 +25,24 @@ const minifyOpts  = {
     unsafe: true,
 	}
 }
-const minified = UglifyJS.minify(js, minifyOpts).code
+const readableMinified = UglifyJS.minify(js, minifyOpts).code;
+minifyOpts.mangle.toplevel = true;
+const minified = UglifyJS.minify(js, minifyOpts).code;
+
 const htmlOpen = encodeURIComponent(html+'<script>eval(atob("');
 const code = Buffer.from(minified).toString('base64');
 const htmlClose = encodeURIComponent('"))</script>');
 const url = prefix +  htmlOpen + code + htmlClose
 
-if (process.env.DEBUG) {
+if (DEBUG) {
   console.log({
     js,
+    readableMinified,
     minified,
-    codeLength: js.length,
+    jsLength: js.length,
     minifiedLength: minified.length,
-    minSaved: js.length - minified.length,
+    encodedLength: code.length,
+    minifySaved: js.length - minified.length,
     urlLength: url.length
   })
 }
