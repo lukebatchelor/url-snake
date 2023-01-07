@@ -1,0 +1,10 @@
+{
+  "name": "url-snake",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Luke.Batchelor",
+  "license": "MIT",
+  "devDependencies": {
+    "uglify-js": "^3.17.4"
+  }
+}
