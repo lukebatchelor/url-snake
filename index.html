@@ -49,6 +49,7 @@
           snake.push([...snake[snake.length-1]])
           fruit = [rand(9), rand(9)]
         }
+        // move head
         snake.unshift([nextX, nextY]);
         // clear screen
         rect(0, 0, "#fff", width, height);
@@ -59,7 +60,7 @@
         // draw fruit
         rect(fruit[0] * gridSize, fruit[1] * gridSize, "#0f0");
         // draw score
-        text('Score: '+score, width-10, 30, 'right')
+        text('Score: '+score, width-9, 30, 'right')
       },
       die = () => {
         dead = 1;
@@ -75,8 +76,9 @@
       };
     b.innerHTML = body;
     let ctx = a.getContext("2d");
-    a.height=height
-    a.width=width
+    // a is the id of the injected canvas, available globally
+    a.height=height;
+    a.width=width;
     ctx.font = "30px Arial";
     d.addEventListener("keyup", (e) => {
       var w = e.which;
@@ -86,6 +88,5 @@
       w == 40 && ((headingX = 0), (headingY = 1));
       w == 32 && (dead ? reset() : (paused = paused ? 0 : 1));
     });
-    setInterval(update, 500);
-    update();
+    setInterval(update, width);
   </script>
