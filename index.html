@@ -2,91 +2,93 @@
   <script>
     let d = document,
       b = d.body,
-      M=Math,
-      body = `Press space to start/pause/reset, arrow keys to move<br><br><canvas id="a"><style>canvas{border: 1px solid black;}body{background:#ccc;}</style>`,
+      M = Math,
+      body = `Space: start/pause/reset. Arrows: Move<div><canvas id=a><style>#a{border: solid}*{background:tan}</style>`,
       gridSize = 40,
-      height = 400,
-      width = height,
-      headingX = 0,
-      headingY = 1,
-      paused = 0,
-      dead = 1,
-      score=0,
-      snake = [
-        [3, 3],
-        [4, 3],
-        [5, 3],
-      ],
-      defaultSnake=snake,
-      fruit = [5, 5],
-      black = '#000',
+      canvasSize = 400,
+      // let alive initialise itself to undefined which is falsy
+      alive,
+      // don't worry about initialising score, heading, etc, we'll reset on start
+      score,
+      snake = [[3, 3]],
+      // valid array key codes
+      headings = [37,38,39,40],
+      // heading stores the current heading key code - 38
+      heading,
+      defaultSnake = snake,
+      // default the fruit to the pos of the snakes tail to save a coord
+      fruit = snake[0],
+      black = "#000",
+      red = "red",
       rect = (x, y, col = black, w = gridSize, h = gridSize) => {
         (ctx.fillStyle = col), ctx.fillRect(x, y, w, h);
       },
-      text = (str, x, y, align='center') => {
+      text = (str, x, y = x, align = "center") => {
         ctx.fillStyle = black;
         ctx.textAlign = align;
         ctx.fillText(str, x, y);
       },
-      rand=(max) => M.floor(M.random()*max),
+      rand = () => M.floor(M.random() * 9),
       update = () => {
-        if (paused || dead) return;
-        let [x, y] = snake.pop(),
-          nextX = snake[0][0] + headingX,
-          nextY = snake[0][1] + headingY;
+        if (!alive) return;
+        let [headX, headY] = snake[0],
+          nextX = headX + (heading)%2,
+          nextY = headY + (heading-1)%2,
+          collides = ([x,y])=> (x ==nextX&&y==nextY);
+        // remove current tail
+        snake.pop();
         // check death
         if (
           nextX < 0 ||
           nextX > 9 ||
           nextY < 0 ||
           nextY > 9 ||
-          snake.some(([bX, bY]) => nextX == bX && nextY == bY)
-        )
+          snake.some(collides)
+          )
           return die();
+          // and increment the new head
+          snake = [[nextX, nextY], ...snake];
         // check fruit
-        if (nextX==fruit[0]&&nextY==fruit[1]) {
+        if (collides(fruit)) {
+          // make a copy of the tail, using the score as a proxy for snake.length-1
+          snake.push([...snake[score]]);
           score++;
-          snake.push([...snake[snake.length-1]])
-          fruit = [rand(9), rand(9)]
+          fruit = [rand(), rand()];
         }
-        // move head
-        snake.unshift([nextX, nextY]);
         // clear screen
-        rect(0, 0, "#fff", width, height);
+        rect(0, 0, "tan", canvasSize, canvasSize);
         // draw snake
         for ([x, y] of snake) {
           rect(x * gridSize, y * gridSize);
         }
         // draw fruit
-        rect(fruit[0] * gridSize, fruit[1] * gridSize, "#0f0");
+        rect(fruit[0] * gridSize, fruit[1] * gridSize, red);
         // draw score
-        text('Score: '+score, width-9, 30, 'right')
+        text(score, 9, 30, "left");
       },
       die = () => {
-        dead = 1;
-        rect(0, 0, "#f00", width, height);
-        text('You died :(', width/2, height/2)
+        alive = 0;
+        rect(0, 0, red, canvasSize, canvasSize);
+        // rely on default y position and text align
+        text(":(", canvasSize / 2);
       },
       reset = () => {
-        (dead = 0),
+        (alive = 1),
           (snake = [...defaultSnake]),
-          (headingX = 0),
-          (score=0),
-          (headingY = 1);
+          (heading = 2), // heading 40 - 38
+          (score = 0);
       };
     b.innerHTML = body;
     let ctx = a.getContext("2d");
     // a is the id of the injected canvas, available globally
-    a.height=height;
-    a.width=width;
-    ctx.font = "30px Arial";
-    d.addEventListener("keyup", (e) => {
-      var w = e.which;
-      w == 37 && ((headingX = -1), (headingY = 0));
-      w == 38 && ((headingX = 0), (headingY = -1));
-      w == 39 && ((headingX = 1), (headingY = 0));
-      w == 40 && ((headingX = 0), (headingY = 1));
-      w == 32 && (dead ? reset() : (paused = paused ? 0 : 1));
+    a.height = a.width = canvasSize;
+    // invalid font family defaults to auto
+    ctx.font = "30px f";
+    d.addEventListener("keyup", ({ which: w }) => {
+      // if key is space and we're dead, reset. Otherwise, check if key is a valid
+      // arrow key and store that key - 38 (saves a couple of bytes calculating later)
+      w == 32 && !alive ? reset() :  (heading = headings.includes(w) && w-38) 
     });
-    setInterval(update, width);
+    setInterval(update, canvasSize);
   </script>
+
