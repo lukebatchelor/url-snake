@@ -75,7 +75,7 @@
       reset = () => {
         (alive = 1),
           (snake = [...defaultSnake]),
-          (heading = 2), // heading 40 - 38
+          (heading = 2), // heading = 40 - 38
           (score = 0);
       };
     b.innerHTML = body;
@@ -85,10 +85,10 @@
     // invalid font family defaults to auto
     ctx.font = "30px f";
     d.addEventListener("keyup", ({ which: w }) => {
-      // if key is space and we're dead, reset. Otherwise, check if key is a valid
-      // arrow key and store that key - 38 (saves a couple of bytes calculating later)
-      w == 32 && !alive ? reset() :  (heading = headings[w] && w-38) 
+      headings[w] ? (heading=w-38) : w==32 && !alive && reset();
     });
+    // if key is space and we're dead, reset. Otherwise, check if key is a valid
+    // arrow key and store that key - 38 (saves a couple of bytes calculating later)
     setInterval(update, canvasSize);
   </script>
 
