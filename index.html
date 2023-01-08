@@ -12,7 +12,7 @@
       score,
       snake = [[3, 3]],
       // valid array key codes
-      headings = [37,38,39,40],
+      headings = {37:1,38:1,39:1,40:1},
       // heading stores the current heading key code - 38
       heading,
       defaultSnake = snake,
@@ -87,7 +87,7 @@
     d.addEventListener("keyup", ({ which: w }) => {
       // if key is space and we're dead, reset. Otherwise, check if key is a valid
       // arrow key and store that key - 38 (saves a couple of bytes calculating later)
-      w == 32 && !alive ? reset() :  (heading = headings.includes(w) && w-38) 
+      w == 32 && !alive ? reset() :  (heading = headings[w] && w-38) 
     });
     setInterval(update, canvasSize);
   </script>
