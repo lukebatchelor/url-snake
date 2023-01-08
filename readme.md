@@ -57,7 +57,7 @@ This repo contains two sets of code, one for a mobile compatible version and one
   run.js         - node script that generates minified files and outputs data urls
   dev.html       - dev file for mobile snake
   index.html     - minified version of mobile snake
-  /minimum-snake
+  /golf
     dev.html     - dev file for code golf'd snake
     index.html   - minified version of golf'd snake
 ```
@@ -67,7 +67,7 @@ To develop on either one you can run the `yarn install` to install the dev depen
 ```
 /dist
   index.html    - minified version of compatible snake
-  minimum.html  - minified version of golf'd snake
+  golf.html  - minified version of golf'd snake
 ```
 
 and also update both `index.html` files.
@@ -80,7 +80,7 @@ If developing on a single file, use the `run.js` script directly from whichever 
 $ node run.js
 data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22bGV0IGU9ZG9jdW1lbnQsdD1lLmJvZHksbD1NYXRoLHI9IlNwYWNlOiBzdGFydC9yZXNldC4gQXJyb3dzOiB...
 
-$ cd minimum-snake
+$ cd golf
 $ node ../run.js
 data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22bGV0IGU9ZG9jdW1lbnQsdD1lLmJvZHksbD1NYXRoLHI9IlNwYWNlOiBzdGFydC9yZXNldC4gQXJyb3dzOiB...
 ```
