@@ -15,19 +15,38 @@ So, if we can put html, css and js in a url and have that render a valid html pa
 
 ## Result
 
-I've come up with a 1033 byte solution that is a fully playable game of snake.
+I've come up with a ~1033~ 859 byte solution that is a fully playable game of snake.
 
-> ```let e=document,t=e.body,r=Math,l='Press space to start/pause/reset, arrow keys to move<br><br><canvas id="a"><style>canvas{border: 1px solid black;}body{background:#ccc;}</style>',i=40,o=400,n=o,s=0,f=1,d=0,c=1,h=0,p=[[3,3],[4,3],[5,3]],u=p,y=[5,5],b="#000",g=(e,t,r=b,l=i,o=i)=>{S.fillStyle=r,S.fillRect(e,t,l,o)},v=(e,t,r,l="center")=>{S.fillStyle=b,S.textAlign=l,S.fillText(e,t,r)},x=e=>r.floor(r.random()*e),k=()=>{if(!d&&!c){let[e,t]=p.pop(),r=p[0][0]+s,l=p[0][1]+f;if(r<0||9<r||l<0||9<l||p.some(([e,t])=>r==e&&l==t))return m();r==y[0]&&l==y[1]&&(h++,p.push([...p[p.length-1]]),y=[x(9),x(9)]),p.unshift([r,l]),g(0,0,"#fff",n,o);for([e,t]of p)g(e*i,t*i);g(y[0]*i,y[1]*i,"#0f0"),v("Score: "+h,n-9,30,"right")}},m=()=>{c=1,g(0,0,"#f00",n,o),v("You died :(",n/2,o/2)},w=()=>{c=0,p=[...u],s=0,h=0,f=1},S=(t.innerHTML=l,a.getContext("2d"));a.height=o,a.width=n,S.font="30px Arial",e.addEventListener("keyup",e=>{e=e.which;37==e&&(s=-1,f=0),38==e&&(s=0,f=-1),39==e&&(s=1,f=0),40==e&&(s=0,f=1),32==e&&(c?w():d=d?0:1)}),setInterval(k,n);```
+> ```let e=document,t=e.body,l=Math,r="Space: start/pause/reset. Arrows: Move<div><canvas id=a><style>#a{border: solid}*{background:tan}</style>",n=40,o=400,i,d,f=[[3,3]],s={37:1,38:1,39:1,40:1},c,h=f,p=f[0],u="#000",v="red",g=(e,t,l=u,a=n,r=n)=>{k.fillStyle=l,k.fillRect(e,t,a,r)},b=(e,t,l=t,a="center")=>{k.fillStyle=u,k.textAlign=a,k.fillText(e,t,l)},m=()=>l.floor(9*l.random()),w=()=>{if(i){let[e,t]=f[0],l=e+c%2,a=t+(c-1)%2,r=([e,t])=>e==l&&t==a;if(f.pop(),l<0||9<l||a<0||9<a||f.some(r))return M();f=[[l,a],...f],r(p)&&(f.push([...f[d]]),d++,p=[m(),m()]),g(0,0,"tan",o,o);for([x,y]of f)g(x*n,y*n);g(p[0]*n,p[1]*n,v),b(d,9,30,"left")}},M=()=>{i=0,g(0,0,v,o,o),b(":(",o/2)},S=()=>{i=1,f=[...h],c=2,d=0},k=(t.innerHTML=r,a.getContext("2d"));a.height=a.width=o,k.font="30px f",e.addEventListener("keyup",({which:e})=>{32!=e||i?c=s[e]&&e-38:S()}),setInterval(w,o);```
 
-Encoded as a url it is 1464 bytes long:
+Encoded as a url it is 1232 bytes long:
 
-> ```data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22bGV0IGU9ZG9jdW1lbnQsdD1lLmJvZHkscj1NYXRoLGw9J1ByZXNzIHNwYWNlIHRvIHN0YXJ0L3BhdXNlL3Jlc2V0LCBhcnJvdyBrZXlzIHRvIG1vdmU8YnI+PGJyPjxjYW52YXMgaWQ9ImEiPjxzdHlsZT5jYW52YXN7Ym9yZGVyOiAxcHggc29saWQgYmxhY2s7fWJvZHl7YmFja2dyb3VuZDojY2NjO308L3N0eWxlPicsaT00MCxvPTQwMCxuPW8scz0wLGY9MSxkPTAsYz0xLGg9MCxwPVtbMywzXSxbNCwzXSxbNSwzXV0sdT1wLHk9WzUsNV0sYj0iIzAwMCIsZz0oZSx0LHI9YixsPWksbz1pKT0+e1MuZmlsbFN0eWxlPXIsUy5maWxsUmVjdChlLHQsbCxvKX0sdj0oZSx0LHIsbD0iY2VudGVyIik9PntTLmZpbGxTdHlsZT1iLFMudGV4dEFsaWduPWwsUy5maWxsVGV4dChlLHQscil9LHg9ZT0+ci5mbG9vcihyLnJhbmRvbSgpKmUpLGs9KCk9PntpZighZCYmIWMpe2xldFtlLHRdPXAucG9wKCkscj1wWzBdWzBdK3MsbD1wWzBdWzFdK2Y7aWYocjwwfHw5PHJ8fGw8MHx8OTxsfHxwLnNvbWUoKFtlLHRdKT0+cj09ZSYmbD09dCkpcmV0dXJuIG0oKTtyPT15WzBdJiZsPT15WzFdJiYoaCsrLHAucHVzaChbLi4ucFtwLmxlbmd0aC0xXV0pLHk9W3goOSkseCg5KV0pLHAudW5zaGlmdChbcixsXSksZygwLDAsIiNmZmYiLG4sbyk7Zm9yKFtlLHRdb2YgcClnKGUqaSx0KmkpO2coeVswXSppLHlbMV0qaSwiIzBmMCIpLHYoIlNjb3JlOiAiK2gsbi05LDMwLCJyaWdodCIpfX0sbT0oKT0+e2M9MSxnKDAsMCwiI2YwMCIsbixvKSx2KCJZb3UgZGllZCA6KCIsbi8yLG8vMil9LHc9KCk9PntjPTAscD1bLi4udV0scz0wLGg9MCxmPTF9LFM9KHQuaW5uZXJIVE1MPWwsYS5nZXRDb250ZXh0KCIyZCIpKTthLmhlaWdodD1vLGEud2lkdGg9bixTLmZvbnQ9IjMwcHggQXJpYWwiLGUuYWRkRXZlbnRMaXN0ZW5lcigia2V5dXAiLGU9PntlPWUud2hpY2g7Mzc9PWUmJihzPS0xLGY9MCksMzg9PWUmJihzPTAsZj0tMSksMzk9PWUmJihzPTEsZj0wKSw0MD09ZSYmKHM9MCxmPTEpLDMyPT1lJiYoYz93KCk6ZD1kPzA6MSl9KSxzZXRJbnRlcnZhbChrLG4pOw==%22))%3C%2Fscript%3E```
+> ```data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22bGV0IGU9ZG9jdW1lbnQsdD1lLmJvZHksbD1NYXRoLHI9IlNwYWNlOiBzdGFydC9wYXVzZS9yZXNldC4gQXJyb3dzOiBNb3ZlPGRpdj48Y2FudmFzIGlkPWE+PHN0eWxlPiNhe2JvcmRlcjogc29saWR9KntiYWNrZ3JvdW5kOnRhbn08L3N0eWxlPiIsbj00MCxvPTQwMCxpLGQsZj1bWzMsM11dLHM9ezM3OjEsMzg6MSwzOToxLDQwOjF9LGMsaD1mLHA9ZlswXSx1PSIjMDAwIix2PSJyZWQiLGc9KGUsdCxsPXUsYT1uLHI9bik9PntrLmZpbGxTdHlsZT1sLGsuZmlsbFJlY3QoZSx0LGEscil9LGI9KGUsdCxsPXQsYT0iY2VudGVyIik9PntrLmZpbGxTdHlsZT11LGsudGV4dEFsaWduPWEsay5maWxsVGV4dChlLHQsbCl9LG09KCk9PmwuZmxvb3IoOSpsLnJhbmRvbSgpKSx3PSgpPT57aWYoaSl7bGV0W2UsdF09ZlswXSxsPWUrYyUyLGE9dCsoYy0xKSUyLHI9KFtlLHRdKT0+ZT09bCYmdD09YTtpZihmLnBvcCgpLGw8MHx8OTxsfHxhPDB8fDk8YXx8Zi5zb21lKHIpKXJldHVybiBNKCk7Zj1bW2wsYV0sLi4uZl0scihwKSYmKGYucHVzaChbLi4uZltkXV0pLGQrKyxwPVttKCksbSgpXSksZygwLDAsInRhbiIsbyxvKTtmb3IoW3gseV1vZiBmKWcoeCpuLHkqbik7ZyhwWzBdKm4scFsxXSpuLHYpLGIoZCw5LDMwLCJsZWZ0Iil9fSxNPSgpPT57aT0wLGcoMCwwLHYsbyxvKSxiKCI6KCIsby8yKX0sUz0oKT0+e2k9MSxmPVsuLi5oXSxjPTIsZD0wfSxrPSh0LmlubmVySFRNTD1yLGEuZ2V0Q29udGV4dCgiMmQiKSk7YS5oZWlnaHQ9YS53aWR0aD1vLGsuZm9udD0iMzBweCBmIixlLmFkZEV2ZW50TGlzdGVuZXIoImtleXVwIiwoe3doaWNoOmV9KT0+ezMyIT1lfHxpP2M9c1tlXSYmZS0zODpTKCl9KSxzZXRJbnRlcnZhbCh3LG8pOw==%22))%3C%2Fscript%3E```
 
 <p align="center">
   <img src="./snake1.jpg" width="200" />
   <img src="./snake2.jpg" width="200" /> 
 </p>
 
+## Code golfing
+
+I'm super happy with some of the code golfing techniques I've used in this code and have tried to leave comments explaining most of them. I'm especially proud of:
+
+```js
+//...
+headings = {37:1,38:1,39:1,40:1},
+// ...
+update = () => {
+  if (!alive) return;
+  let [headX, headY] = snake[0],
+    nextX = headX + (heading)%2,
+    nextY = headY + (heading-1)%2,
+    collides = ([x,y])=> (x ==nextX&&y==nextY);
+//...
+d.addEventListener("keyup", ({ which: w }) => {
+  w == 32 && !alive ? reset() :  (heading = headings[w] && w-38) 
+});
+```
 
 ## Running the code
 
