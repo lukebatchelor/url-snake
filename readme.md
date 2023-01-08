@@ -48,40 +48,59 @@ d.addEventListener("keyup", ({ which: w }) => {
 });
 ```
 
-## Running the code
+## Development
 
-The game is built inside of `index.html`. `run.js` is a node script that takes that html file and encodes it as a url.
+This repo contains two sets of code, one for a mobile compatible version and one just for maximum code golfing
+
+```
+/
+  run.js         - node script that generates minified files and outputs data urls
+  dev.html       - dev file for mobile snake
+  index.html     - minified version of mobile snake
+  /minimum-snake
+    dev.html     - dev file for code golf'd snake
+    index.html   - minified version of golf'd snake
+```
+
+To develop on either one you can run the `yarn install` to install the dev dependencies and then `yarn build` to build both versions. This will output a dist directory like so
+
+```
+/dist
+  index.html    - minified version of compatible snake
+  minimum.html  - minified version of golf'd snake
+```
+
+and also update both `index.html` files.
+
+### Building a single file
+
+If developing on a single file, use the `run.js` script directly from whichever dir you are working on.
 
 ```
 $ node run.js
+data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22bGV0IGU9ZG9jdW1lbnQsdD1lLmJvZHksbD1NYXRoLHI9IlNwYWNlOiBzdGFydC9yZXNldC4gQXJyb3dzOiB...
 
-data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22Y29uc3QgZD1kb2N1bWVudCxiPWQuYm9keSxhPWQuY3JlYXRlRWxlbWVudCgiY2FudmFzIiksYz1hLmdldENvbnRleHQoIjJkIik7Yi5hcHBlbmQoYSksYy5oZWlnaHQ9NDAwLGMud2lkdGg9NDAwLGMucmVjdCgwLDAsMTAwLDEwMCksYy5zdHJva2UoKTs=%22))%3C%2Fscript%3E
+$ cd minimum-snake
+$ node ../run.js
+data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22bGV0IGU9ZG9jdW1lbnQsdD1lLmJvZHksbD1NYXRoLHI9IlNwYWNlOiBzdGFydC9yZXNldC4gQXJyb3dzOiB...
 ```
 
-You can get some debugging information by passing the DEBUG flag
+To get more debug information, add the `DEBUG` flag
 
 ```
-$ DEBUG=a node run.js
+$DEBUG=1 node run.js
 {
-  js: 'const d=document,\n' +
-    '    b=d.body,\n' +
-    "    a=d.createElement('canvas'),\n" +
-    '    c = a.getContext("2d");\n' +
-    '  b.append(a)\n' +
-    '  c.height = 400;\n' +
-    '  c.width = 400;\n' +
-    '  c.rect(0,0,100,100);\n' +
-    '  c.stroke();',
-  minified: 'const d=document,b=d.body,a=d.createElement("canvas"),c=a.getContext("2d");b.append(a),c.height=400,c.width=400,c.rect(0,0,100,100),c.stroke();',
-  codeLength: 178,
-  minifiedLength: 143,
-  minSaved: 35,
-  urlLength: 276
+  js: 'let e=document,t=e.body,l=Math,r="Space: start/reset. Arrows: Move<div><canvas id=a><style>#a{border:solid}*{background:tan}</style>",n=40,o=400,i,d,f=[[3,3]],s= ...',
+  jsLength: 852,
+  minifiedLength: 852,
+  encodedLength: 1136,
+  minifySaved: 0,
+  urlLength: 1220
 }
-data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22Y29uc3QgZD1kb2N1bWVudCxiPWQuYm9keSxhPWQuY3JlYXRlRWxlbWVudCgiY2FudmFzIiksYz1hLmdldENvbnRleHQoIjJkIik7Yi5hcHBlbmQoYSksYy5oZWlnaHQ9NDAwLGMud2lkdGg9NDAwLGMucmVjdCgwLDAsMTAwLDEwMCksYy5zdHJva2UoKTs=%22))%3C%2Fscript%3E
+data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22bGV0IGU9ZG9jdW1lbnQsdD1lLmJvZHksbD1NYXRoLHI9IlNwYWNlOiBzdGFydC9yZXNldC4gQXJyb3dzOiBNb3ZlPGRpdj48Y2FudmFz ...
 ```
 
-You could also automatically open the url in a browser by using `xargs`
+To automatically open the data url in chrome, you can use xargs:
 
 ```
 $ node run.js | xargs open -a "Google Chrome"

@@ -2,8 +2,8 @@ const fs = require("fs");
 const UglifyJS = require("uglify-js");
 
 const DEBUG = !!process.env.DEBUG;
-const fileStr = fs.readFileSync("./index.html", "utf-8");
-const [html, js] = fileStr
+const devFileStr = fs.readFileSync("./dev.html", "utf-8");
+const [html, js] = devFileStr
   .split("<script>")
   .map((part) => part.replace("</script>", "").trim());
 
@@ -47,5 +47,8 @@ if (DEBUG) {
     urlLength: url.length,
   });
 }
+
+const indexFileStr = html + '<script>' + minified + '</script>';
+fs.writeFileSync('./index.html', indexFileStr)
 
 console.log(url);

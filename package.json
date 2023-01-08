@@ -4,6 +4,9 @@
   "main": "index.js",
   "author": "Luke.Batchelor",
   "license": "MIT",
+  "scripts": {
+    "build": "rm -f dist && mkdir -p dist && node run.js && cd minimum-snake && node ../run.js && cp index.html ../dist/minimum-snake.html && cp ../index.html ../dist/index.html"
+  },
   "devDependencies": {
     "uglify-js": "^3.17.4"
   }
