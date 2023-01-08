@@ -5,7 +5,7 @@
   "author": "Luke.Batchelor",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && node run.js && cd golf && node ../run.js && cp index.html ../dist/golf.html && cp ../index.html ../dist/index.html"
+    "build": "rm -rf dist && mkdir -p dist && DIST=\"index\" node run.js && cd golf && DIST=\"golf\" node ../run.js"
   },
   "devDependencies": {
     "uglify-js": "^3.17.4"
