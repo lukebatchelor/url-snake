@@ -28,6 +28,8 @@ Encoded as a url it is 1220 bytes long:
   <img src="./snake2.jpg" width="200" /> 
 </p>
 
+You can paste that url into your browsers address bar, or checkout the minified html running [here](https://url-snake.netlify.app/golf.html) (or [here](https://url-snake.netlify.app) for a mobile compatible version)
+
 ## Code golfing
 
 I'm super happy with some of the code golfing techniques I've used in this code and have tried to leave comments explaining most of them. I'm especially proud of:
