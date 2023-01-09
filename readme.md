@@ -15,13 +15,13 @@ So, if we can put html, css and js in a url and have that render a valid html pa
 
 ## Result
 
-I've come up with a ~1033~ 852 byte solution that is a fully playable game of snake.
+I've come up with a ~1033~ ~852~ 799 byte solution that is a fully playable game of snake.
 
-> ```let e=document,t=e.body,l=Math,r="Space: start/reset. Arrows: Move<div><canvas id=a><style>#a{border:solid}*{background:tan}</style>",n=40,o=400,i,d,f=[[3,3]],s={37:1,38:1,39:1,40:1},c,h=f,p=f[0],u="#000",v="red",g=(e,t,l=u,r=n,a=n)=>{k.fillStyle=l,k.fillRect(e,t,r,a)},b=(e,t,l=t,r="center")=>{k.fillStyle=u,k.textAlign=r,k.fillText(e,t,l)},m=()=>l.floor(9*l.random()),w=()=>{if(i){let[e,t]=f[0],l=e+c%2,r=t+(c-1)%2,a=([e,t])=>e==l&&t==r;if(f.pop(),l<0||9<l||r<0||9<r||f.some(a))return M();f=[[l,r],...f],a(p)&&(f.push([...f[d]]),d++,p=[m(),m()]),g(0,0,"tan",o,o);for([x,y]of f)g(x*n,y*n);g(p[0]*n,p[1]*n,v),b(d,9,30,"left")}},M=()=>{i=0,g(0,0,v,o,o),b(":(",o/2)},S=()=>{i=1,f=[...h],c=2,d=0},k=(t.innerHTML=r,a.getContext("2d"));a.height=a.width=o,k.font="30px f",e.addEventListener("keyup",({which:e})=>{s[e]?c=e-38:32!=e||i||S()}),setInterval(w,o);```
+> ```let e=document,t=e.body,l=Math,o="Space: start/reset. Arrows: Move<div><canvas id=a><style>#a{border:solid}*{background:tan}</style>",n=40,i=400,r,d,s=[[3,3]],c={37:1,38:1,39:1,40:1},h,p=s,u=s[0],g="#000",m,v=(e=g,t=i,o=0,r=o)=>{m[f="fillStyle"]=e,m.fillRect(o*n,r*n,t,t)},b=(e,t=i/2,o=t,r="center")=>{m[f]=g,m.textAlign=r,m.fillText(e,t,o)},w=e=>{if(r){let[e,t]=s[0],o=e+h%2,r=t+(h-1)%2,a=([e,t])=>e==o&&t==r;if(s.pop(),o<0||9<o||r<0||9<r||s.some(a))return M();s=[[o,r],...s],a(u)&&(s.push([...s[d++]]),u=u.map(e=>l.floor(9*l.random()))),v`tan`;for([x,y]of s)v(g,n,x,y);v("red",n,u[0],u[1]),b(d,9,30,"left")}},M=e=>{r=0,v`red`,b`:(`},k=e=>{r=1,s=[...p],h=2,d=0};t.innerHTML=o,m=a.getContext`2d`,a.height=a.width=i,m.font="30px f",e.onkeyup=({which:e})=>{c[e]?h=e-38:32!=e||r||k()},setInterval(w,i);```
 
-Encoded as a url it is 1220 bytes long:
+Encoded as a url it is 1152 bytes long:
 
-> ```data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22bGV0IGU9ZG9jdW1lbnQsdD1lLmJvZHksbD1NYXRoLHI9IlNwYWNlOiBzdGFydC9yZXNldC4gQXJyb3dzOiBNb3ZlPGRpdj48Y2FudmFzIGlkPWE+PHN0eWxlPiNhe2JvcmRlcjpzb2xpZH0qe2JhY2tncm91bmQ6dGFufTwvc3R5bGU+IixuPTQwLG89NDAwLGksZCxmPVtbMywzXV0scz17Mzc6MSwzODoxLDM5OjEsNDA6MX0sYyxoPWYscD1mWzBdLHU9IiMwMDAiLHY9InJlZCIsZz0oZSx0LGw9dSxyPW4sYT1uKT0+e2suZmlsbFN0eWxlPWwsay5maWxsUmVjdChlLHQscixhKX0sYj0oZSx0LGw9dCxyPSJjZW50ZXIiKT0+e2suZmlsbFN0eWxlPXUsay50ZXh0QWxpZ249cixrLmZpbGxUZXh0KGUsdCxsKX0sbT0oKT0+bC5mbG9vcig5KmwucmFuZG9tKCkpLHc9KCk9PntpZihpKXtsZXRbZSx0XT1mWzBdLGw9ZStjJTIscj10KyhjLTEpJTIsYT0oW2UsdF0pPT5lPT1sJiZ0PT1yO2lmKGYucG9wKCksbDwwfHw5PGx8fHI8MHx8OTxyfHxmLnNvbWUoYSkpcmV0dXJuIE0oKTtmPVtbbCxyXSwuLi5mXSxhKHApJiYoZi5wdXNoKFsuLi5mW2RdXSksZCsrLHA9W20oKSxtKCldKSxnKDAsMCwidGFuIixvLG8pO2ZvcihbeCx5XW9mIGYpZyh4Km4seSpuKTtnKHBbMF0qbixwWzFdKm4sdiksYihkLDksMzAsImxlZnQiKX19LE09KCk9PntpPTAsZygwLDAsdixvLG8pLGIoIjooIixvLzIpfSxTPSgpPT57aT0xLGY9Wy4uLmhdLGM9MixkPTB9LGs9KHQuaW5uZXJIVE1MPXIsYS5nZXRDb250ZXh0KCIyZCIpKTthLmhlaWdodD1hLndpZHRoPW8say5mb250PSIzMHB4IGYiLGUuYWRkRXZlbnRMaXN0ZW5lcigia2V5dXAiLCh7d2hpY2g6ZX0pPT57c1tlXT9jPWUtMzg6MzIhPWV8fGl8fFMoKX0pLHNldEludGVydmFsKHcsbyk7%22))%3C%2Fscript%3E```
+> ```data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22bGV0IGU9ZG9jdW1lbnQsdD1lLmJvZHksbD1NYXRoLG89IlNwYWNlOiBzdGFydC9yZXNldC4gQXJyb3dzOiBNb3ZlPGRpdj48Y2FudmFzIGlkPWE+PHN0eWxlPiNhe2JvcmRlcjpzb2xpZH0qe2JhY2tncm91bmQ6dGFufTwvc3R5bGU+IixuPTQwLGk9NDAwLHIsZCxzPVtbMywzXV0sYz17Mzc6MSwzODoxLDM5OjEsNDA6MX0saCxwPXMsdT1zWzBdLGc9IiMwMDAiLG0sdj0oZT1nLHQ9aSxvPTAscj1vKT0+e21bZj0iZmlsbFN0eWxlIl09ZSxtLmZpbGxSZWN0KG8qbixyKm4sdCx0KX0sYj0oZSx0PWkvMixvPXQscj0iY2VudGVyIik9PnttW2ZdPWcsbS50ZXh0QWxpZ249cixtLmZpbGxUZXh0KGUsdCxvKX0sdz1lPT57aWYocil7bGV0W2UsdF09c1swXSxvPWUraCUyLHI9dCsoaC0xKSUyLGE9KFtlLHRdKT0+ZT09byYmdD09cjtpZihzLnBvcCgpLG88MHx8OTxvfHxyPDB8fDk8cnx8cy5zb21lKGEpKXJldHVybiBNKCk7cz1bW28scl0sLi4uc10sYSh1KSYmKHMucHVzaChbLi4uc1tkKytdXSksdT11Lm1hcChlPT5sLmZsb29yKDkqbC5yYW5kb20oKSkpKSx2YHRhbmA7Zm9yKFt4LHldb2Ygcyl2KGcsbix4LHkpO3YoJ3JlZCcsbix1WzBdLHVbMV0pLGIoZCw5LDMwLCJsZWZ0Iil9fSxNPWU9PntyPTAsdmByZWRgLGJgOihgfSxrPWU9PntyPTEscz1bLi4ucF0saD0yLGQ9MH07dC5pbm5lckhUTUw9byxtPWEuZ2V0Q29udGV4dGAyZGAsYS5oZWlnaHQ9YS53aWR0aD1pLG0uZm9udD0iMzBweCBmIixlLm9ua2V5dXA9KHt3aGljaDplfSk9PntjW2VdP2g9ZS0zODozMiE9ZXx8cnx8aygpfSxzZXRJbnRlcnZhbCh3LGkpOw==%22))%3C%2Fscript%3E```
 
 <p align="center">
   <img src="./snake1.jpg" width="200" />
@@ -45,9 +45,9 @@ update = () => {
     nextY = headY + (heading-1)%2,
     collides = ([x,y])=> (x ==nextX&&y==nextY);
 //...
-d.addEventListener("keyup", ({ which: w }) => {
+d.onkeyup = ({ which: w }) => {
   headings[w] ? (heading=w-38) : w==32 && !alive && reset();
-});
+};
 ```
 
 ## Development
