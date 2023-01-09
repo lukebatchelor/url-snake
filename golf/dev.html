@@ -1,7 +1,6 @@
 <body>
   <script>
     let b = document.body,
-      body = `Space: start/reset. Arrows: Move<div><canvas id=a><style>#a{border:solid}*{background:tan}</style>`,
       gridSize = 40,
       canvasSize = 400,
       // let alive initialise itself to undefined which is falsy
@@ -29,7 +28,7 @@
         C.textAlign = align;
         C.fillText(str, x, y);
       };
-    b.innerHTML = body;
+    b.innerHTML = `Space: start/reset. Arrows: Move<div><canvas id=a><style>#a{border:solid}*{background:tan}</style>`;
     C = a.getContext`2d`;
     // a is the id of the injected canvas, available globally
     a.height = a.width = canvasSize;
@@ -37,9 +36,9 @@
     C.font = "30px f";
     b.onkeyup = ({ which: w }) => {
       // check if key is arrow key. 0=up,1=right,2=down,-1=left
-      (w>36&&w<41)
-        ? (H = w - 38) // if it is wer store the key-38 as our heading
-        : w == 32 &&         // otherwise, if it was a space and we are dead
+      ((w-=32)>4&&w<9)
+        ? (H = w - 6) // if it is wer store the key-38 as our heading
+        : !w &&         // otherwise, if it was a space and we are dead
           !alive &&
           ((alive = 1),      // reset the game (inlined the logic to save declaring a fn)
           (snake = [[4, 3]]),
@@ -76,7 +75,7 @@
         // using js dates to create random numbers. We can't just map calling
         // new Date twice because we'll always get the same number back twice
         // so we modulo by 10 and then 9 to get a differt y coord from the x
-        fruit = (D=new Date(),[D%10,D*S%10]);
+        fruit = [(D=new Date())%10,D*S%10];
       }
       // clear screen relying on default args and tagged template strings
       rect`tan`;
