@@ -1,8 +1,6 @@
 <body>
   <script>
-    let d = document,
-      b = d.body,
-      M = Math,
+    let b = document.body,
       body = `Space: start/reset. Arrows: Move<div><canvas id=a><style>#a{border:solid}*{background:tan}</style>`,
       gridSize = 40,
       canvasSize = 400,
@@ -10,79 +8,25 @@
       alive,
       // don't worry about initialising score, heading, etc, we'll reset on start
       score,
-      snake = [[3, 3]],
-      // valid array key codes
-      headings = {37:1,38:1,39:1,40:1},
-      // heading stores the current heading key code - 38
+      snake = [[4, 3]],
+      // our current direction 
       heading,
-      defaultSnake = snake,
       // default the fruit to the pos of the snakes tail to save a coord
       fruit = snake[0],
       black = "#000",
       ctx,
       // we automatically times the x and y by gridsize since the all the places
-      // that draw rects either need it, or they're passing 0,0. Use a bunch of 
+      // that draw rects either need it, or they're passing 0,0. Use a bunch of
       // default values to allow super short screen clearing
-      rect = (col=black,size=canvasSize,x=0,y=x) => {
+      rect = (col = "red", size = canvasSize, x = 0, y = x) => {
         // set a global fillStyle var so we can use it again in the text fn
-        (ctx[f="fillStyle"] = col), ctx.fillRect(x*gridSize, y*gridSize, size, size);
+        (ctx[(f = "fillStyle")] = col),
+          ctx.fillRect(x * gridSize, y * gridSize, size, size);
       },
-      text = (str, x=canvasSize/2, y=x, align = "center") => {
+      text = (str, x = canvasSize / 2, y = x, align = "center") => {
         ctx[f] = black;
         ctx.textAlign = align;
         ctx.fillText(str, x, y);
-      },
-      update = fakeVar => {
-        if (!alive) return;
-        let [headX, headY] = snake[0],
-          nextX = headX + (heading)%2,
-          nextY = headY + (heading-1)%2,
-          collides = ([x,y])=> (x ==nextX&&y==nextY);
-        // remove current tail
-        snake.pop();
-        // check death
-        // 20
-        // if([nextX,nextY].some(coord => coord<0||coord>9)||snake.some(collides))return die();
-        if (
-          nextX < 0 ||
-          nextX > 9 ||
-          nextY < 0 ||
-          nextY > 9 ||
-          snake.some(collides)
-          )
-          return die();
-          // and increment the new head
-          snake = [[nextX, nextY], ...snake];
-        // check fruit
-        if (collides(fruit)) {
-          // make a copy of the tail, using the score as a proxy for snake.length-1
-          snake.push([...snake[score++]]);
-          // use map with an inlined fn because its shorter than declaring a fn
-          // and calling it twice
-          fruit = fruit.map(fakeVar=>M.floor(M.random() * 9));
-        }
-        // clear screen
-        rect`tan`;
-        // draw snake
-        for ([x, y] of snake) {
-          rect(black,gridSize,x,y);
-        }
-        // draw fruit
-        rect("red",gridSize,fruit[0],fruit[1]);
-        // draw score
-        text(score, 9, 30, "left");
-      },
-      die = fakeVar => {
-        alive = 0;
-        rect`red`;
-        // rely on default y position and text align
-        text`:(`;
-      },
-      reset = fakeVar => {
-        (alive = 1),
-          (snake = [...defaultSnake]),
-          (heading = 2), // heading = 40 - 38
-          (score = 0);
       };
     b.innerHTML = body;
     ctx = a.getContext`2d`;
@@ -90,11 +34,58 @@
     a.height = a.width = canvasSize;
     // invalid font family defaults to auto
     ctx.font = "30px f";
-    d.onkeyup = ({ which: w }) => {
-      // if key is space and we're dead, reset. Otherwise, check if key is a valid
-      // arrow key and store that key - 38 (saves a couple of bytes calculating later)
-      headings[w] ? (heading=w-38) : w==32 && !alive && reset();
+    b.onkeyup = ({ which: w }) => {
+      // check if key is arrow key. 0=up,1=right,2=down,-1=left
+      (w>36&&w<41)
+        ? (heading = w - 38) // if it is wer store the key-38 as our heading
+        : w == 32 &&         // otherwise, if it was a space and we are dead
+          !alive &&
+          ((alive = 1),      // reset the game (inlined the logic to save declaring a fn)
+          (snake = [[4, 3]]),
+          (heading = 2),     // heading = 40 - 38 = down
+          (score = 0));
     };
-    setInterval(update, canvasSize);
+    setInterval((fakeVar) => {
+      if (!alive) return;
+      let [headX, headY] = snake[0],
+        nextX = headX + (heading % 2),
+        nextY = headY + ((heading - 1) % 2),
+        // create a collision fn on the fly to check for self and fruit collision
+        collides = ([x, y]) => x == nextX && y == nextY;
+      snake.pop();    // remove current tail
+      if (           // check out of bounds and self collision
+        nextX < 0 ||
+        nextX > 9 ||
+        nextY < 0 ||
+        nextY > 9 ||
+        snake.some(collides)
+      )
+        return (  
+          (alive = 0),  // inlined death fn
+          rect(),       // completely rely on default values to clear whole screen red
+          text`:(`     // rely on default y position and text align
+        );
+      // add back our new head by making a new copy since it's shorter than unshift
+      snake = [[nextX, nextY], ...snake];
+      // check fruit collision
+      if (collides(fruit)) {
+        // make a copy of the tail, using the pre-incremented score as a pointer
+        // to snake.length 🤯
+        snake[++score]=snake[score-1]
+        // using js dates to create random numbers. We can't just map calling
+        // new Date twice because we'll always get the same number back twice
+        // so we modulo by 10 and then 9 to get a differt y coord from the x
+        fruit = (D=new Date(),[D%10,D%11%10]);
+      }
+      // clear screen relying on default args and tagged template strings
+      rect`tan`;
+      // draw snake
+      for ([x, y] of snake) {
+        rect(black, gridSize, x, y);
+      }
+      // draw fruit
+      rect(fakeVar, gridSize, fruit[0], fruit[1]);
+      // draw score
+      text(score, 9, 30, "left");
+    }, canvasSize);
   </script>
-

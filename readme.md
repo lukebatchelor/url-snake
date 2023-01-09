@@ -15,13 +15,13 @@ So, if we can put html, css and js in a url and have that render a valid html pa
 
 ## Result
 
-I've come up with a ~1033~ ~852~ 799 byte solution that is a fully playable game of snake.
+I've come up with a ~1033~ ~852~ ~799~ 728 byte solution that is a fully playable game of snake.
 
-> ```let e=document,t=e.body,l=Math,o="Space: start/reset. Arrows: Move<div><canvas id=a><style>#a{border:solid}*{background:tan}</style>",n=40,i=400,r,d,s=[[3,3]],c={37:1,38:1,39:1,40:1},h,p=s,u=s[0],g="#000",m,v=(e=g,t=i,o=0,r=o)=>{m[f="fillStyle"]=e,m.fillRect(o*n,r*n,t,t)},b=(e,t=i/2,o=t,r="center")=>{m[f]=g,m.textAlign=r,m.fillText(e,t,o)},w=e=>{if(r){let[e,t]=s[0],o=e+h%2,r=t+(h-1)%2,a=([e,t])=>e==o&&t==r;if(s.pop(),o<0||9<o||r<0||9<r||s.some(a))return M();s=[[o,r],...s],a(u)&&(s.push([...s[d++]]),u=u.map(e=>l.floor(9*l.random()))),v`tan`;for([x,y]of s)v(g,n,x,y);v("red",n,u[0],u[1]),b(d,9,30,"left")}},M=e=>{r=0,v`red`,b`:(`},k=e=>{r=1,s=[...p],h=2,d=0};t.innerHTML=o,m=a.getContext`2d`,a.height=a.width=i,m.font="30px f",e.onkeyup=({which:e})=>{c[e]?h=e-38:32!=e||r||k()},setInterval(w,i);```
+> ```let e=document.body,t="Space: start/reset. Arrows: Move<div><canvas id=a><style>#a{border:solid}*{background:tan}</style>",r=40,o=400,i,d,s=[[4,3]],c,h=s[0],p="#000",g,u=(e="red",t=o,l=0,n=l)=>{g[f="fillStyle"]=e,g.fillRect(l*r,n*r,t,t)},v=(e,t=o/2,l=t,n="center")=>{g[f]=p,g.textAlign=n,g.fillText(e,t,l)};e.innerHTML=t,g=a.getContext`2d`,a.height=a.width=o,g.font="30px f",e.onkeyup=({which:e})=>{36<e&&e<41?c=e-38:32!=e||i||(i=1,s=[[4,3]],c=2,d=0)},setInterval(o=>{if(i){let[e,t]=s[0],l=e+c%2,n=t+(c-1)%2,a=([e,t])=>e==l&&t==n;if(s.pop(),l<0||9<l||n<0||9<n||s.some(a))return i=0,u(),v`:(`;s=[[l,n],...s],a(h)&&(s[++d]=s[d-1],h=[(D=new Date)%10,D%11%10]),u`tan`;for([x,y]of s)u(p,r,x,y);u(o,r,h[0],h[1]),v(d,9,30,"left")}},o);```
 
 Encoded as a url it is 1152 bytes long:
 
-> ```data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22bGV0IGU9ZG9jdW1lbnQsdD1lLmJvZHksbD1NYXRoLG89IlNwYWNlOiBzdGFydC9yZXNldC4gQXJyb3dzOiBNb3ZlPGRpdj48Y2FudmFzIGlkPWE+PHN0eWxlPiNhe2JvcmRlcjpzb2xpZH0qe2JhY2tncm91bmQ6dGFufTwvc3R5bGU+IixuPTQwLGk9NDAwLHIsZCxzPVtbMywzXV0sYz17Mzc6MSwzODoxLDM5OjEsNDA6MX0saCxwPXMsdT1zWzBdLGc9IiMwMDAiLG0sdj0oZT1nLHQ9aSxvPTAscj1vKT0+e21bZj0iZmlsbFN0eWxlIl09ZSxtLmZpbGxSZWN0KG8qbixyKm4sdCx0KX0sYj0oZSx0PWkvMixvPXQscj0iY2VudGVyIik9PnttW2ZdPWcsbS50ZXh0QWxpZ249cixtLmZpbGxUZXh0KGUsdCxvKX0sdz1lPT57aWYocil7bGV0W2UsdF09c1swXSxvPWUraCUyLHI9dCsoaC0xKSUyLGE9KFtlLHRdKT0+ZT09byYmdD09cjtpZihzLnBvcCgpLG88MHx8OTxvfHxyPDB8fDk8cnx8cy5zb21lKGEpKXJldHVybiBNKCk7cz1bW28scl0sLi4uc10sYSh1KSYmKHMucHVzaChbLi4uc1tkKytdXSksdT11Lm1hcChlPT5sLmZsb29yKDkqbC5yYW5kb20oKSkpKSx2YHRhbmA7Zm9yKFt4LHldb2Ygcyl2KGcsbix4LHkpO3YoJ3JlZCcsbix1WzBdLHVbMV0pLGIoZCw5LDMwLCJsZWZ0Iil9fSxNPWU9PntyPTAsdmByZWRgLGJgOihgfSxrPWU9PntyPTEscz1bLi4ucF0saD0yLGQ9MH07dC5pbm5lckhUTUw9byxtPWEuZ2V0Q29udGV4dGAyZGAsYS5oZWlnaHQ9YS53aWR0aD1pLG0uZm9udD0iMzBweCBmIixlLm9ua2V5dXA9KHt3aGljaDplfSk9PntjW2VdP2g9ZS0zODozMiE9ZXx8cnx8aygpfSxzZXRJbnRlcnZhbCh3LGkpOw==%22))%3C%2Fscript%3E```
+> ```data:text/html;charset=utf-8,%3Cbody%3E%3Cscript%3Eeval(atob(%22bGV0IGU9ZG9jdW1lbnQuYm9keSx0PSJTcGFjZTogc3RhcnQvcmVzZXQuIEFycm93czogTW92ZTxkaXY+PGNhbnZhcyBpZD1hPjxzdHlsZT4jYXtib3JkZXI6c29saWR9KntiYWNrZ3JvdW5kOnRhbn08L3N0eWxlPiIscj00MCxvPTQwMCxpLGQscz1bWzQsM11dLGMsaD1zWzBdLHA9IiMwMDAiLGcsdT0oZT0icmVkIix0PW8sbD0wLG49bCk9PntnW2Y9ImZpbGxTdHlsZSJdPWUsZy5maWxsUmVjdChsKnIsbipyLHQsdCl9LHY9KGUsdD1vLzIsbD10LG49ImNlbnRlciIpPT57Z1tmXT1wLGcudGV4dEFsaWduPW4sZy5maWxsVGV4dChlLHQsbCl9O2UuaW5uZXJIVE1MPXQsZz1hLmdldENvbnRleHRgMmRgLGEuaGVpZ2h0PWEud2lkdGg9byxnLmZvbnQ9IjMwcHggZiIsZS5vbmtleXVwPSh7d2hpY2g6ZX0pPT57MzY8ZSYmZTw0MT9jPWUtMzg6MzIhPWV8fGl8fChpPTEscz1bWzQsM11dLGM9MixkPTApfSxzZXRJbnRlcnZhbChvPT57aWYoaSl7bGV0W2UsdF09c1swXSxsPWUrYyUyLG49dCsoYy0xKSUyLGE9KFtlLHRdKT0+ZT09bCYmdD09bjtpZihzLnBvcCgpLGw8MHx8OTxsfHxuPDB8fDk8bnx8cy5zb21lKGEpKXJldHVybiBpPTAsdSgpLHZgOihgO3M9W1tsLG5dLC4uLnNdLGEoaCkmJihzWysrZF09c1tkLTFdLGg9WyhEPW5ldyBEYXRlKSUxMCxEJTExJTEwXSksdWB0YW5gO2ZvcihbeCx5XW9mIHMpdShwLHIseCx5KTt1KG8scixoWzBdLGhbMV0pLHYoZCw5LDMwLCJsZWZ0Iil9fSxvKTs=%22))%3C%2Fscript%3E```
 
 <p align="center">
   <img src="./snake1.jpg" width="200" />
@@ -49,6 +49,8 @@ d.onkeyup = ({ which: w }) => {
   headings[w] ? (heading=w-38) : w==32 && !alive && reset();
 };
 ```
+
+If you want to just see the annotated golf'd code, take a look at [golf/dev.html](golf/dev.html)
 
 ## Development
 
