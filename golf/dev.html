@@ -6,50 +6,51 @@
       canvasSize = 400,
       // let alive initialise itself to undefined which is falsy
       alive,
-      // don't worry about initialising score, heading, etc, we'll reset on start
-      score,
+      // don't worry about initialising score, heading or ctx, we'll let them get set globally on use
+      // though the minifier wont automatically mangle their names, so we have to make them short ourselves
+      // score,   // S
+      // heading, // H
+      // ctx,     // C
       snake = [[4, 3]],
       // our current direction 
-      heading,
       // default the fruit to the pos of the snakes tail to save a coord
       fruit = snake[0],
       black = "#000",
-      ctx,
       // we automatically times the x and y by gridsize since the all the places
       // that draw rects either need it, or they're passing 0,0. Use a bunch of
       // default values to allow super short screen clearing
       rect = (col = "red", size = canvasSize, x = 0, y = x) => {
         // set a global fillStyle var so we can use it again in the text fn
-        (ctx[(f = "fillStyle")] = col),
-          ctx.fillRect(x * gridSize, y * gridSize, size, size);
+        (C[(f = "fillStyle")] = col),
+          C.fillRect(x * gridSize, y * gridSize, size, size);
       },
       text = (str, x = canvasSize / 2, y = x, align = "center") => {
-        ctx[f] = black;
-        ctx.textAlign = align;
-        ctx.fillText(str, x, y);
+        C[f] = black;
+        C.textAlign = align;
+        C.fillText(str, x, y);
       };
     b.innerHTML = body;
-    ctx = a.getContext`2d`;
+    C = a.getContext`2d`;
     // a is the id of the injected canvas, available globally
     a.height = a.width = canvasSize;
     // invalid font family defaults to auto
-    ctx.font = "30px f";
+    C.font = "30px f";
     b.onkeyup = ({ which: w }) => {
       // check if key is arrow key. 0=up,1=right,2=down,-1=left
       (w>36&&w<41)
-        ? (heading = w - 38) // if it is wer store the key-38 as our heading
+        ? (H = w - 38) // if it is wer store the key-38 as our heading
         : w == 32 &&         // otherwise, if it was a space and we are dead
           !alive &&
           ((alive = 1),      // reset the game (inlined the logic to save declaring a fn)
           (snake = [[4, 3]]),
-          (heading = 2),     // heading = 40 - 38 = down
-          (score = 0));
+          (H = 2),     // heading = 40 - 38 = down
+          (S = 0));
     };
     setInterval((fakeVar) => {
       if (!alive) return;
       let [headX, headY] = snake[0],
-        nextX = headX + (heading % 2),
-        nextY = headY + ((heading - 1) % 2),
+        nextX = headX + (H % 2),
+        nextY = headY + ((H - 1) % 2),
         // create a collision fn on the fly to check for self and fruit collision
         collides = ([x, y]) => x == nextX && y == nextY;
       snake.pop();    // remove current tail
@@ -71,7 +72,7 @@
       if (collides(fruit)) {
         // make a copy of the tail, using the pre-incremented score as a pointer
         // to snake.length 🤯
-        snake[++score]=snake[score-1]
+        snake[++S]=snake[S-1]
         // using js dates to create random numbers. We can't just map calling
         // new Date twice because we'll always get the same number back twice
         // so we modulo by 10 and then 9 to get a differt y coord from the x
@@ -86,6 +87,6 @@
       // draw fruit
       rect(fakeVar, gridSize, fruit[0], fruit[1]);
       // draw score
-      text(score, 9, 30, "left");
+      text(S, 9, 30, "left");
     }, canvasSize);
   </script>
