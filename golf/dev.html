@@ -76,16 +76,14 @@
         // using js dates to create random numbers. We can't just map calling
         // new Date twice because we'll always get the same number back twice
         // so we modulo by 10 and then 9 to get a differt y coord from the x
-        fruit = (D=new Date(),[D%10,D%11%10]);
+        fruit = (D=new Date(),[D%10,D*S%10]);
       }
       // clear screen relying on default args and tagged template strings
       rect`tan`;
       // draw snake
-      for ([x, y] of snake) {
-        rect(black, gridSize, x, y);
-      }
+      snake.map(pos => rect(black, gridSize,...pos))
       // draw fruit
-      rect(fakeVar, gridSize, fruit[0], fruit[1]);
+      rect(fakeVar, gridSize, ...fruit);
       // draw score
       text(S, 9, 30, "left");
     }, canvasSize);

@@ -14,7 +14,7 @@ const [html, js] = devFileStr
 let minifyOpts = {
   mangle: {
     eval: true,
-    toplevel: false,
+    toplevel: false
   },
   compress: {
     sequences: true,
