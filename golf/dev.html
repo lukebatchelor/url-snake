@@ -2,16 +2,15 @@
   <script>
     let b = document.body,
       body = `Space: start/reset. Arrows: Move<div><canvas id=a><style>#a{border:solid}*{background:tan}</style>`,
-      gridSize = 40,
-      canvasSize = 400,
-      sz = 10,
+      gridSize = 32,
+      sz = 16,
+      canvasSize = sz*gridSize,
       // let alive initialise itself to undefined which is falsy
       alive,
       // don't worry about initialising score, heading or ctx, we'll let them get set globally on use
       // though the minifier wont automatically mangle their names, so we have to make them short ourselves
       // score,   // S
       H,
-      y = v=>v/sz|0,
       // ctx,     // C
       s = [34],
       // our current direction 
@@ -24,7 +23,7 @@
       rect = (col = "red", size = canvasSize, xy = 0) => {
         // set a global fillStyle var so we can use it again in the text fn
         (C[(f = "fillStyle")] = col),
-          C.fillRect((xy%sz) * gridSize, y(xy)*gridSize, size, size);
+          C.fillRect(gridSize*xy&480, xy*2&480, size, size);
       },
       text = (str, x = canvasSize / 2, y = x, align = "center") => {
         C[f] = black;
@@ -41,34 +40,31 @@
       // check if key is arrow key. 0=up,1=right,2=down,-1=left
       (w == 32 &&         // otherwise, if it was a space and we are dead
           !alive &&
-          ((alive = 1),
-          (s = [34]),
-          (H = sz),     // heading = 40 - 38 = down
-          (S = 0))) ||
+          (alive = 1,
+          s = [34],
+          H = sz,     // heading = 40 - 38 = down
+          S = 0)) ||
       (H = [-1,-sz,1,sz][w-37] || H); 
     
     setInterval((fakeVar) => {
-      if (alive) {
+     if (alive) {
       n = s[0] + H;
       s.pop();    // remove current tail
-      if (           // check out of bounds and self collision
-        n < 0 || n > 99 ||
-        (H&1 && y(n) - y(n-H)) ||
+      if (        // check out of bounds and self collision
+        (n>>8 | H&1 & (n^(n-H))>>4) ||
         s.includes(n)
-      )
-        return (  
-          (alive = 0),  // inlined death fn
+      ) {
+          alive = 0,  // inlined death fn
           rect(),       // completely rely on default values to clear whole screen red
           text`:(`     // rely on default y position and text align
-        );
+        ;
+      } else {
       // add back our new head by making a new copy since it's shorter than unshift
       s=[n,...s];
       // check fruit collision
         // make a copy of the tail, using the pre-incremented score as a pointer
         // to snake.length 🤯
-      (n==fruit) &&
-      (s[++S]=s[S-1]) &&
-      (fruit = 1223*S%(sz*sz));
+      (n-fruit) || (s[++S]=s[S-1],fruit = 1223*S&255);
       // clear screen relying on default args and tagged template strings
       rect`tan`;
       // draw snake
@@ -77,6 +73,7 @@
       rect(fakeVar, gridSize, fruit);
       // draw score
       text(S, 9, 30, "left");
-      }
+     }
+    }
     }, canvasSize);
   </script>
