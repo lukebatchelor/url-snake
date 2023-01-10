@@ -13,10 +13,10 @@
       H,
       y = v=>v/sz|0,
       // ctx,     // C
-      snake = [34],
+      s = [34],
       // our current direction 
       // default the fruit to the pos of the snakes tail to save a coord
-      fruit = snake[0],
+      fruit = gridSize,
       black = "#000",
       // we automatically times the x and y by gridsize since the all the places
       // that draw rects either need it, or they're passing 0,0. Use a bunch of
@@ -42,19 +42,19 @@
       (w == 32 &&         // otherwise, if it was a space and we are dead
           !alive &&
           ((alive = 1),
-          (snake = [34]),
+          (s = [34]),
           (H = sz),     // heading = 40 - 38 = down
           (S = 0))) ||
       (H = [-1,-sz,1,sz][w-37] || H); 
     
     setInterval((fakeVar) => {
-      if (!alive) return;
-      const next  = snake[0] + H;
-      snake.pop();    // remove current tail
+      if (alive) {
+      n = s[0] + H;
+      s.pop();    // remove current tail
       if (           // check out of bounds and self collision
-        next < 0 || next > 99 ||
-        (H&1 && y(next) - y(next-H)) ||
-        snake.includes(next)
+        n < 0 || n > 99 ||
+        (H&1 && y(n) - y(n-H)) ||
+        s.includes(n)
       )
         return (  
           (alive = 0),  // inlined death fn
@@ -62,20 +62,21 @@
           text`:(`     // rely on default y position and text align
         );
       // add back our new head by making a new copy since it's shorter than unshift
-      snake.unshift(next);
+      s=[n,...s];
       // check fruit collision
         // make a copy of the tail, using the pre-incremented score as a pointer
         // to snake.length 🤯
-      (!(next-fruit)) &&
-      (snake[++S]=snake[S-1]) &&
-      (fruit = 255*97*S%(sz*sz));
+      (n==fruit) &&
+      (s[++S]=s[S-1]) &&
+      (fruit = 1223*S%(sz*sz));
       // clear screen relying on default args and tagged template strings
       rect`tan`;
       // draw snake
-      snake.map(pos => rect(black, gridSize,pos))
+      s.map(p => rect(black, gridSize,p))
       // draw fruit
       rect(fakeVar, gridSize, fruit);
       // draw score
       text(S, 9, 30, "left");
+      }
     }, canvasSize);
   </script>
