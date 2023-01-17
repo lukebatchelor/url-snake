@@ -1,6 +1,6 @@
 # URL Snake
 
-A little experiement with seeing how complex of an app I can store entirely within a url.
+A little experiment with seeing how complex of an app I can store entirely within a url.
 
 The basic idea revolves around the fact that a data urls can define their encoding as text/html. 
 
