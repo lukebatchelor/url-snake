@@ -2,27 +2,28 @@
   <script>
     let b = document.body,
       body = `Space: start/reset. Arrows: Move<div><canvas id=a><style>#a{border:solid}*{background:tan}</style>`,
-      gridSize = 40,
-      canvasSize = 400,
+      gridSize = 32,
+      sz = 16,
+      canvasSize = sz*gridSize,
       // let alive initialise itself to undefined which is falsy
       alive,
       // don't worry about initialising score, heading or ctx, we'll let them get set globally on use
       // though the minifier wont automatically mangle their names, so we have to make them short ourselves
       // score,   // S
-      // heading, // H
+      H,
       // ctx,     // C
-      snake = [[4, 3]],
+      s = [34],
       // our current direction 
       // default the fruit to the pos of the snakes tail to save a coord
-      fruit = snake[0],
+      fruit = gridSize,
       black = "#000",
       // we automatically times the x and y by gridsize since the all the places
       // that draw rects either need it, or they're passing 0,0. Use a bunch of
       // default values to allow super short screen clearing
-      rect = (col = "red", size = canvasSize, x = 0, y = x) => {
+      rect = (col = "red", size = canvasSize, xy = 0) => {
         // set a global fillStyle var so we can use it again in the text fn
         (C[(f = "fillStyle")] = col),
-          C.fillRect(x * gridSize, y * gridSize, size, size);
+          C.fillRect(gridSize*xy&480, xy*2&480, size, size);
       },
       text = (str, x = canvasSize / 2, y = x, align = "center") => {
         C[f] = black;
@@ -35,56 +36,44 @@
     a.height = a.width = canvasSize;
     // invalid font family defaults to auto
     C.font = "30px f";
-    b.onkeyup = ({ which: w }) => {
+    b.onkeyup = ({ which: w }) => 
       // check if key is arrow key. 0=up,1=right,2=down,-1=left
-      (w>36&&w<41)
-        ? (H = w - 38) // if it is wer store the key-38 as our heading
-        : w == 32 &&         // otherwise, if it was a space and we are dead
+      (w == 32 &&         // otherwise, if it was a space and we are dead
           !alive &&
-          ((alive = 1),      // reset the game (inlined the logic to save declaring a fn)
-          (snake = [[4, 3]]),
-          (H = 2),     // heading = 40 - 38 = down
-          (S = 0));
-    };
+          (alive = 1,
+          s = [34],
+          H = sz,     // heading = 40 - 38 = down
+          S = 0)) ||
+      (H = [-1,-sz,1,sz][w-37] || H); 
+    
     setInterval((fakeVar) => {
-      if (!alive) return;
-      let [headX, headY] = snake[0],
-        nextX = headX + (H % 2),
-        nextY = headY + ((H - 1) % 2),
-        // create a collision fn on the fly to check for self and fruit collision
-        collides = ([x, y]) => x == nextX && y == nextY;
-      snake.pop();    // remove current tail
-      if (           // check out of bounds and self collision
-        nextX < 0 ||
-        nextX > 9 ||
-        nextY < 0 ||
-        nextY > 9 ||
-        snake.some(collides)
-      )
-        return (  
-          (alive = 0),  // inlined death fn
+     if (alive) {
+      n = s[0] + H;
+      s.pop();    // remove current tail
+      if (        // check out of bounds and self collision
+        (n>>8 | H&1 & (n^(n-H))>>4) ||
+        s.includes(n)
+      ) {
+          alive = 0,  // inlined death fn
           rect(),       // completely rely on default values to clear whole screen red
           text`:(`     // rely on default y position and text align
-        );
+        ;
+      } else {
       // add back our new head by making a new copy since it's shorter than unshift
-      snake = [[nextX, nextY], ...snake];
+      s=[n,...s];
       // check fruit collision
-      if (collides(fruit)) {
         // make a copy of the tail, using the pre-incremented score as a pointer
         // to snake.length 🤯
-        snake[++S]=snake[S-1]
-        // using js dates to create random numbers. We can't just map calling
-        // new Date twice because we'll always get the same number back twice
-        // so we modulo by 10 and then 9 to get a differt y coord from the x
-        fruit = (D=new Date(),[D%10,D*S%10]);
-      }
+      (n-fruit) || (s[++S]=s[S-1],fruit = 1223*S&255);
       // clear screen relying on default args and tagged template strings
       rect`tan`;
       // draw snake
-      snake.map(pos => rect(black, gridSize,...pos))
+      s.map(p => rect(black, gridSize,p))
       // draw fruit
-      rect(fakeVar, gridSize, ...fruit);
+      rect(fakeVar, gridSize, fruit);
       // draw score
       text(S, 9, 30, "left");
+     }
+    }
     }, canvasSize);
   </script>
